@@ -1,78 +1,74 @@
+"use client"
+import { client } from '@/sanity/lib/client';
 import Image from 'next/image';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaStar } from "react-icons/fa";
+import { Product } from '../../../types/product';
+import { allproducts, four } from "@/sanity/lib/query";
+import { urlFor } from '@/sanity/lib/image';
+import Link from 'next/link';
+import { addToCart } from '../action/action';
+import Swal from 'sweetalert2'
 
 
-interface Iproduct{
-  title:string,
-  price:string,
-  id:number,
-  rating?:string,
-  old_price?:string,
-  img_url:string
-} 
-let product:Iproduct[] =[
-  {
-   title:"VERTICAL STRIPED SHIRT",
-   id:5,
-   old_price:"$232",
-   price:"$212",
-   img_url:"/images/pic5.png"
 
-},
-{
-  title:"COURAGE GRAPHIC T-SHIRT",
-  id:6,
-  price:"$145",
-  img_url:"/images/pic6.png"
 
-}, 
-{
-  title:"LOOSE FIT BERMUDA SHORTS",
-  id:7,
-  price:"$80",
-  img_url:"/images/pic7.png"
-
-},
- {
-  title:"FADED SKINNY JEANS",
-  id:8,
-  price:"$210",
-  img_url:"/images/pic8.png"
-
-}
-]
 let star=[
   <FaStar key={1}/>,
   <FaStar key={2}/>,
   <FaStar key={3}/>,
   <FaStar key={4}/>]
 
-export default function Sell() {
+const Sell = () => {
+  const [product ,setProduct] = useState<Product[]>([])
+
+    useEffect(() => {
+        async function fetchproduct(){
+            const fetchedproduct:Product[] = await client.fetch(allproducts)
+            setProduct(fetchedproduct)
+        }
+        fetchproduct()
+    },[])
+
+
+    const handleAddToCart = (e : React.MouseEvent,product:Product) => {
+      e.preventDefault()
+      Swal.fire({
+        position : "top-right",
+        icon :"success",
+        title :`${product.name} added to cart`,
+        showConfirmButton :false,
+        timer : 1000
+
+      })
+      addToCart(product)
+
+      
+    }
   return (
-    <div className='w-full h-full sm:h-[700px] pt-32'>
+        <div className='w-full h-full sm:h-[700px] pt-12 mt-8'>
         <h2 className='text-4xl md:5xl lg:6xl font-extrabold text-center'>TOP SELLING </h2>
-        <div className='flex flex-col md:flex-col-2 lg:flex-row justify-center lg:space-y-0 space-y-24 md:justify-evenly items-center m-10'>
-          {
-            product.map((data) => {
-              return(
-                <div key={data.id}>
-              
-              <div className='w-[295px] h-[298px] bg-[#F0EEED] rounded-[20px] '>
-              <Image src={data.img_url} alt={data.title} width={200} height={100} className='w-full h-full rounded-[20px]'></Image>
-              </div>
-        
-            <p className='text-lg font-bold mt-4'>{data.title}</p>
-            <p className='flex text-[#FFC633]'>
-            {star.map((icon,index)=>( <span key={index}>{icon}
-                          </span>))} </p>
-            <p className='text-lg font-bold mt-1'>{data.price}<span className='text-gray-500 line-through pl-2'>{data.old_price}</span>
-            </p>
+        <div className='grid grid-cols sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 justify-center md:justify-evenly items-center m-6 p-4'>
+
+        {product.map((products) => (
+    
+    <div key={products._id}>
+      <Link href={`/product/${products.slug?.current}`}>
+   <h2> {products.name}</h2>
+   {products.image && (
+    <Image src={urlFor(products.image).url()} alt="pic" width={100} height={100}/>
+   )}
+   {products.price}
+   {products.sizes}
+   <button className='bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold y-2 px-4 rounded-lg shadow-md hover:shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out' onClick={(e) =>handleAddToCart(e ,products) }>Add To Cart</button>
+
+   </Link>
+    </div>
+)
+)}
             </div> 
-            )
-            })
-          }
-        </div>
-        </div>
+            </div>
+
   )
 }
+export default Sell;

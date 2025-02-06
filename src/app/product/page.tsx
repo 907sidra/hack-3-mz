@@ -69,7 +69,6 @@ Products() {
             })
           }
         </div>
-        <Sell/>
         </div>
   )
 }

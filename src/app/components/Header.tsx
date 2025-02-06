@@ -4,6 +4,8 @@ import React from 'react'
 import { CgProfile } from 'react-icons/cg'
 import { SheetSide } from './sheet';
 import { NavigationMenuDemo } from './navigation-menu';
+import { SignedOut, SignInButton, SignedIn, UserButton } from '@clerk/nextjs';
+
 
 const Header = () => {
   return (
@@ -36,9 +38,10 @@ const Header = () => {
           <div className='flex space-x-2 pr-4 mr-4'>
           <SearchIcon className=" h-6 w-6 md:hidden" /> 
           {/* cart */}
-          <Link href={"/cart"}><ShoppingCartIcon className="h-6 w-6" /></Link>
+          <Link href={"/addtocart"}><ShoppingCartIcon className="h-6 w-6" /></Link>
         {/* login  */}
          <CgProfile className="h-6 w-6 " />
+         
          </div>
         
     </header>
