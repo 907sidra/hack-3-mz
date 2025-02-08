@@ -4,13 +4,7 @@ import "./globals.css";
 import { Announc } from "./components/announcment";
 import Header from "./components/Header";
 import Footer from "./components/footer";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from '@clerk/nextjs'
+
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,18 +22,12 @@ export default function RootLayout({
   return (
    <html lang="en">
       <body>
-        <ClerkProvider>
-        <SignedOut>
-                   <SignInButton />
-                 </SignedOut>
-                 <SignedIn>
-                   <UserButton />
-                 </SignedIn>
+        
           <Announc />
           <Header />
           {children}
           <Footer />
-        </ClerkProvider>
+        
       </body>
     </html>
     

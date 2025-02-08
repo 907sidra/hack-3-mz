@@ -4,7 +4,7 @@ import React from 'react'
 import { CgProfile } from 'react-icons/cg'
 import { SheetSide } from './sheet';
 import { NavigationMenuDemo } from './navigation-menu';
-import { SignedOut, SignInButton, SignedIn, UserButton } from '@clerk/nextjs';
+
 
 
 const Header = () => {
